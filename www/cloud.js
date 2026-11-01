@@ -13,9 +13,9 @@ if(AU&&AU.r){try{const r=await fetch('https://securetoken.googleapis.com/v1/toke
 throw{message:'AUTH'}};
 const fs=async(m,p,b)=>{const r=await fetch(FS+p,{method:m,headers:{Authorization:'Bearer '+await tok(),'Content-Type':'application/json'},body:b?JSON.stringify(b):undefined});if(r.status==404)return null;const j=await r.json();if(!r.ok)throw j.error||j;return j};
 const enc=o=>({fields:Object.fromEntries(Object.entries(o).map(([k,v])=>[k,typeof v=='number'?{doubleValue:v}:{stringValue:String(v)}]))});
-const dec=d=>Object.fromEntries(Object.entries(d.fields||{}).map(([k,v])=>[k,v.doubleValue!==undefined?+v.doubleValue:v.integerValue!==undefined?+v.integerValue:v.stringValue]));
-const nm=k=>['codes','profiles','users'].includes(k)?k:'s_'+k.slice(2);
-const col=async n=>{const j=await fs('GET','/'+n+'?pageSize=300');return((j&&j.documents)||[]).map(d=>({...dec(d),_i:d.name.split('/').pop()})).sort((a,b)=>(b.id||b.t||0)-(a.id||a.t||0))};
+const dec=d=>Object.fromEntries(Object.entries(d.fields||{}).map(([k,v])=>[k,v.doubleValue!==undefined?+v.doubleValue:v.integerValue!==undefined?+v.integerValue:v.timestampValue!==undefined?Date.parse(v.timestampValue):v.stringValue]));
+const nm=k=>['codes','profiles','users'].includes(k)?k:k=='i_chat'?'chats':'s_'+k.slice(2);
+const col=async n=>{const j=await fs('GET','/'+n+(n=='chats'?'?pageSize=60&orderBy=timestamp%20desc':'?pageSize=300'));return((j&&j.documents)||[]).map(d=>{const o={...dec(d),_i:d.name.split('/').pop()};if(n=='chats'){o.t=o.text;o.n=o.sender}return o}).sort((a,b)=>(b.id||b.t||0)-(a.id||a.t||0))};
 const pull=async ks=>{try{await Promise.all(ks.map(async k=>{L.set(k,await col(nm(k)))}));OFF=0;L.set('syn',Date.now())}catch(e){if(e instanceof TypeError||e.message=='AUTH')OFF=1;else er(e)}render()};
 const put=(c,r,id)=>fs('PATCH','/'+c+'/'+id,enc(r)).catch(er);
 const dg=s=>s.replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/\D/g,''),PH=/^01[0-25]\d{8}$/;
@@ -72,8 +72,8 @@ A.add=async()=>{const ti=$('#ti').value.trim();if(!ti)return;const r={id:Date.no
 if(V.s=='grades'){const s=parseFloat($('#sc').value);if(isNaN(s))return;r.s=Math.max(0,Math.min(100,s))}
 else{const l=$('#li').value.trim();if(l){if(!/^https?:\/\//i.test(l))return toast(t('bl'));r.l=l}}
 await put('s_'+V.s,r,r.id);pull(['i_'+V.s])};
-A.send=async()=>{const m=$('#ti').value.trim();if(!m)return;const r={id:Date.now(),t:m,n:L.get('name','')||t(own()?'ro':'rs'),o:own()?1:0};await put('s_chat',r,r.id);pull(['i_chat'])};
-A.del=async d=>{await fs('DELETE','/s_'+V.s+'/'+d.i).catch(er);pull(['i_'+V.s])};
+A.send=async()=>{const q=$('#ti'),m=q.value.trim();if(!m)return;q.value='';const id=Date.now();try{await fs('POST',':commit',{writes:[{update:{name:P+'/chats/'+id,...enc({id,text:m,sender:L.get('name','')||t(own()?'ro':'rs'),uid:AU.u,o:own()?1:0})},updateTransforms:[{fieldPath:'timestamp',setToServerValue:'REQUEST_TIME'}]}]})}catch(x){er(x)}pull(['i_chat'])};
+A.del=async d=>{await fs('DELETE','/'+nm('i_'+V.s)+'/'+d.i).catch(er);pull(['i_'+V.s])};
 
 // owner second-password lock, live chat (cloud), code-uses strings
 Object.assign(D,{p2:['الباسورد التاني للمالك (6 على الأقل)','Owner second password (6+)'],lkt:['اكتب الباسورد التاني','Enter your second password'],lks:['اعمل باسورد تاني للمالك','Create your second owner password'],nu:['عدد مرات استخدام الكود','Uses per code'],inf:['بلا نهاية','Unlimited']});

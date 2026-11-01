@@ -1,7 +1,7 @@
 // AHOS shell: organized home (grouped + search), bottom navigation, More/settings page, page transitions
 (()=>{
 Object.assign(D,{x_gl:['تعلّم','Learn'],x_gc:['تواصل','Connect'],x_gt:['أدواتي','My tools'],x_srch:['ابحث في الأقسام','Search sections'],x_more:['المزيد','More'],x_hm:['الرئيسية','Home'],x_cht:['الدردشة','Chat'],x_nbt:['الإشعارات','Alerts'],x_acc:['الحساب','Account'],x_set:['الإعدادات','Settings'],x_th:['الوضع الفاتح / الداكن','Light / Dark']});
-const GR=[['x_gl',['files','quiz','games','videos']],['x_gc',['live','chat','notif']],['x_gt',['grades','pay','board','look','honor','att']]];
+const GR=[['x_gl',['files','hw','quiz','games','videos']],['x_gc',['live','chat','notif']],['x_gt',['grades','pay','board','look','honor','att']]];
 const st=document.createElement('style');st.textContent=`
 button{-webkit-tap-highlight-color:transparent}.c{transition:transform .15s}.c[data-a]:active,.mr:active{transform:scale(.97)}
 .pg{animation:pg .25s ease-out}@keyframes pg{from{opacity:0;transform:translateY(8px)}}
@@ -32,7 +32,7 @@ const row=(ic,tx,act,ex='')=>`<button class="c row mr" data-a=${act}${ex}><div c
 const moreV=()=>{const sx=sess(),nv=L.get('name','')||t(own()?'ro':'rs');
 return `<div class=w>${hd('☰ '+t('x_more'))}<div class=c><div class=row><div class=av>${esc((nv[0]||'A').toUpperCase())}</div><div><b>${esc(nv)}</b><div class=m>${own()?'👑 '+t('ro'):sx?t('en2')+': '+dt(sx.x):''}</div></div></div></div>
 <div class=gt>${t('x_set')}</div>${row('✨',pnm('look'),'open',' data-s=look')}${row('🌐',lang=='ar'?'English':'عربي','lang')}${row('🌗',t('x_th'),'theme')}${A.snd?row('🔊',t('x_snd')+' '+(L.get('snd',1)?'ON':'OFF'),'snd'):''}
-<div class=gt>${t('x_acc')}</div>${own()?row('👑',t('own2'),'ownerp'):''}${row('💳',pnm('pay'),'open',' data-s=pay')}${row('🔄',t('x_upd')+' · v'+((window.AHOS_VER||{}).name||''),'upd')}${row('🚪',t('lo'),'logout')}</div>`};
+<div class=gt>${t('x_acc')}</div>${own()?row('👑',t('own2'),'ownerp'):''}${row('💳',pnm('pay'),'open',' data-s=pay')}${row('🚪',t('lo'),'logout')}</div>`};
 const vs=views.sec;views.sec=()=>V.s=='more'?moreV():vs();
 
 const ob=A.back;A.back=()=>{NAV=1;ob()};const oo=A.open;A.open=d=>{NAV=1;oo(d)};
