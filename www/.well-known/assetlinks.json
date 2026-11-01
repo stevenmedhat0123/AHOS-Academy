@@ -3,6 +3,6 @@
       "target": {
         "namespace": "android_app",
         "package_name": "io.github.stevenmedhat0123.twa",
-        "sha256_cert_fingerprints": ["96:EE:CF:3E:91:B9:32:F8:27:4C:29:D0:6A:61:20:D2:DD:64:B7:9B:4E:D3:96:AF:48:EB:7B:BB:0B:AF:D5:63"]
+        "sha256_cert_fingerprints": ["11:D0:DE:22:43:A5:C6:8B:6E:0C:E6:2B:56:EE:0B:77:E7:FD:88:73:1C:61:18:3E:BB:C6:0E:CE:08:66:AA:D2"]
       }
     }]
