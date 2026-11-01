@@ -24,24 +24,21 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+
     - name: Install Dependencies
       run: npm install
 
-    - name: Create Android Platform
-      run: npx cap add android
-
-    - name: Update Gradle Wrapper
+    - name: Build Web App
       run: |
-        cd android
-        chmod +x gradlew
-        ./gradlew wrapper --gradle-version 8.7
-
-    - name: Sync Capacitor
-      run: npx cap sync android
+        npx cap add android
+        npx cap sync android
 
     - name: Build Android APK (Debug)
       run: |
         cd android
+        chmod +x gradlew
         ./gradlew assembleDebug
 
     - name: Zip Web Files for OTA Update
