@@ -1,0 +1,54 @@
+name: Build and Release AHOS Academy
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Create Android Platform
+      run: npx cap add android
+
+    - name: Sync Capacitor
+      run: npx cap sync android
+
+    - name: Build Android APK (Debug)
+      run: |
+        cd android
+        chmod +x gradlew
+        ./gradlew assembleDebug
+
+    - name: Zip Web Files for OTA Update
+      run: |
+        cd www
+        zip -r ../update.zip .
+
+    - name: Get Version
+      id: get_version
+      run: echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v${{ steps.get_version.outputs.VERSION }}
+        name: Release v${{ steps.get_version.outputs.VERSION }}
+        files: |
+          android/app/build/outputs/apk/debug/app-debug.apk
+          update.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
