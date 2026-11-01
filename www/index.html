@@ -3,7 +3,6 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <link rel="manifest" href="manifest.json">
 <title>AHOS Academy</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap">
 <style>
@@ -124,10 +123,7 @@ delc(d){L.set('codes',L.get('codes',[]).filter(k=>k.c!==d.c));render()}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(b&&A[b.dataset.a])A[b.dataset.a](b.dataset)});
 render();
 </script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-  <script src="config.js"></script>
+<script src="config.js"></script>
 <script src="uploads-config.js"></script>
 <script src="version.js"></script>
 <script src="update-config.js"></script>
@@ -135,6 +131,7 @@ render();
 <script src="cloud.js"></script>
 <script src="notify.js"></script>
 <script src="upload.js"></script>
+<script src="pdfdb.js"></script>
 <script src="quiz.js"></script>
 <script src="dm.js"></script>
 <script src="class.js"></script>
