@@ -24,9 +24,6 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
-
     - name: Install Dependencies
       run: npm install
 
@@ -34,6 +31,7 @@ jobs:
       run: |
         npx cap add android
         npx cap sync android
+        echo "sdk.dir=$ANDROID_HOME" > android/local.properties
 
     - name: Build Android APK (Debug)
       run: |
