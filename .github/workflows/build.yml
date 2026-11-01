@@ -37,7 +37,7 @@ jobs:
       run: |
         cd android
         chmod +x gradlew
-        ./gradlew assembleDebug
+        ./gradlew assembleDebug -Dorg.gradle.java.home=$JAVA_HOME
 
     - name: Zip Web Files for OTA Update
       run: |
