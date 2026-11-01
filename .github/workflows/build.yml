@@ -18,11 +18,11 @@ jobs:
       with:
         node-version: '18'
 
-    - name: Setup Java 21
+    - name: Setup Java 17
       uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
-        java-version: '21'
+        java-version: '17'
 
     - name: Install Dependencies
       run: npm install
@@ -37,7 +37,7 @@ jobs:
       run: |
         cd android
         chmod +x gradlew
-        ./gradlew assembleDebug -Dorg.gradle.java.home=$JAVA_HOME
+        ./gradlew assembleDebug
 
     - name: Zip Web Files for OTA Update
       run: |
