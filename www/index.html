@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AHOS Academy</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f172a;
+            color: #ffffff;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #38bdf8;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            font-size: 16px;
+            color: #94a3b8;
+            margin-bottom: 40px;
+        }
+        .btn-update {
+            background-color: #10b981;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: 0.3s;
+        }
+        .btn-update:active {
+            background-color: #059669;
+            transform: scale(0.95);
+        }
+        #status {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #cbd5e1;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">AHOS Academy</div>
+    <div class="subtitle">منصة التعليم الذكية</div>
+
+    <button id="checkUpdateBtn" class="btn-update">التحقق من التحديثات</button>
+    <div id="status"></div>
+
+    <script>
+        // ده الكود اللي هيخلي الزرار يشتغل
+        document.getElementById('checkUpdateBtn').addEventListener('click', function() {
+            var statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = "جاري التحقق من وجود تحديثات...";
+            
+            // في الخطوات الجاية هنربط ده بنظام التحديثات الحقيقي
+            setTimeout(function() {
+                statusDiv.innerHTML = "أنت تستخدم أحدث إصدار حالياً!";
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
