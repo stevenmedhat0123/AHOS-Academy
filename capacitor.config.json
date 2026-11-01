@@ -1,0 +1,11 @@
+{
+  "appId": "com.ahos.academy",
+  "appName": "AHOS Academy",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "plugins": {
+    "CapacitorUpdater": {
+      "autoUpdate": true
+    }
+  }
+}
