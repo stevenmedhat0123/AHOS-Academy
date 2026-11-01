@@ -1,7 +1,7 @@
 {
   "name": "AHOS Academy",
-  "description": "AHOS Academy Educational App",
   "short_name": "AHOS",
+  "description": "AHOS Academy Educational App",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0f172a",
