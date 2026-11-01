@@ -1,5 +1,6 @@
 {
   "name": "AHOS Academy",
+  "description": "AHOS Academy Educational App",
   "short_name": "AHOS",
   "start_url": "./index.html",
   "display": "standalone",
