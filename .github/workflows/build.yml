@@ -33,10 +33,6 @@ jobs:
     - name: Sync Capacitor
       run: npx cap sync android
 
-    - name: Fix SDK XML Version Issue
-      run: |
-        echo "android.suppressUnsupportedCompileSdk=34" >> android/gradle.properties
-
     - name: Build Android APK (Debug)
       run: |
         cd android
