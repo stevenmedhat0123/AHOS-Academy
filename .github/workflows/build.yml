@@ -1,4 +1,4 @@
-name: Build and Release AHOS Academy
+name: Build Android APK
 
 on:
   push:
@@ -27,16 +27,25 @@ jobs:
     - name: Install Dependencies
       run: npm install
 
-    - name: Create Android Platform
-      run: npx cap add android
+    - name: Add and Sync Android
+      run: |
+        npx cap add android
+        npx cap sync android
 
-    - name: Sync Capacitor
-      run: npx cap sync android
+    - name: Fix SDK to 35 and Update Gradle Plugin
+      run: |
+        # تغيير إصدار الـ SDK إلى 35
+        sed -i 's/compileSdkVersion = [0-9]*/compileSdkVersion = 35/g' android/variables.gradle
+        sed -i 's/targetSdkVersion = [0-9]*/targetSdkVersion = 35/g' android/variables.gradle
+        
+        # تحديث أداة الأندرويد في Gradle عشان تقبل 35
+        sed -i 's/com.android.tools.build:gradle:[0-9.]*;/com.android.tools.build:gradle:8.7.2;/g' android/build.gradle
 
-    - name: Build Android APK (Debug)
+    - name: Update Gradle Wrapper and Build
       run: |
         cd android
         chmod +x gradlew
+        ./gradlew wrapper --gradle-version 8.9
         ./gradlew assembleDebug
 
     - name: Zip Web Files for OTA Update
@@ -44,15 +53,11 @@ jobs:
         cd www
         zip -r ../update.zip .
 
-    - name: Get Version
-      id: get_version
-      run: echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
-
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v${{ steps.get_version.outputs.VERSION }}
-        name: Release v${{ steps.get_version.outputs.VERSION }}
+        tag_name: v1.0.0-build${{ github.run_number }}
+        name: Release v1.0.0-build${{ github.run_number }}
         files: |
           android/app/build/outputs/apk/debug/app-debug.apk
           update.zip
