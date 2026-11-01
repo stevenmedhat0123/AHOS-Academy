@@ -1,0 +1,2 @@
+// رقم النسخة: زوّد code مع كل تحديث (لازم يكون رقم أكبر من اللي قبله) واكتب اللي اتضاف في notes
+window.AHOS_VER={"code":1,"name":"1.0.0","notes":{"ar":["أول إصدار على GitHub","زرار التحقق من التحديثات داخل التطبيق (المزيد ← التحقق من التحديثات)","شاشة بتوضح اللي اتضاف بعد كل تحديث"],"en":["First GitHub release","In-app update check (More → Check for updates)","A what’s-new box after every update"]}};
