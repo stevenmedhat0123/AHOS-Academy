@@ -16,7 +16,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20' # استخدمنا 20 عشان نمنع مشكلة الـ v24 اللي ظهرت قبل كده
+        node-version: '20'
 
     - name: Setup Java 17
       uses: actions/setup-java@v4
@@ -30,18 +30,17 @@ jobs:
     - name: Create Android Platform
       run: npx cap add android
 
-    - name: Upgrade Gradle Wrapper (Fix SDK XML v4)
-      run: |
-        cd android
-        chmod +x gradlew
-        ./gradlew wrapper --gradle-version 8.7
-
     - name: Sync Capacitor
       run: npx cap sync android
+
+    - name: Fix SDK XML Version Issue
+      run: |
+        echo "android.suppressUnsupportedCompileSdk=34" >> android/gradle.properties
 
     - name: Build Android APK (Debug)
       run: |
         cd android
+        chmod +x gradlew
         ./gradlew assembleDebug
 
     - name: Zip Web Files for OTA Update
