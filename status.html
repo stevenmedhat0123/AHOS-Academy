@@ -5,7 +5,7 @@
 <button onclick="location.href='index.html'">فتح التطبيق</button>
 <button class="g" onclick="reset()">مسح الكاش وإعادة التحميل (ما بيعملش خروج)</button>
 <script>
-const WANT='2026-11-02-1',F=["build.js", "class.js", "cloud.js", "dm.js", "extra.js", "hw.js", "icon-192.png", "icon-512.png", "icon-maskable.png", "index.html", "manifest.webmanifest", "notify.js", "pdfdb.js", "quiz.js", "shell.js", "sw.js", "upload.js", "config.js", "uploads-config.js"];
+const WANT='2026-11-02-2',F=["build.js", "class.js", "cloud.js", "dm.js", "extra.js", "hw.js", "icon-192.png", "icon-512.png", "icon-maskable.png", "index.html", "manifest.webmanifest", "notify.js", "pdfdb.js", "quiz.js", "shell.js", "sw.js", "upload.js", "config.js", "uploads-config.js"];
 async function reset(){try{const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()));const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}catch(e){}location.href='index.html?r='+Date.now()}
 (async()=>{let b='؟',h='';
 try{const t=await(await fetch('build.js?'+Date.now(),{cache:'no-store'})).text();b=(t.match(/'([^']+)'/)||[])[1]||'؟'}catch(e){}

@@ -89,6 +89,6 @@ let w=$('#wm');if(!own()&&sess()){if(!w){w=document.createElement('div');w.id='w
 let b=$('#off');if(OFF){if(!b){b=document.createElement('div');b.id='off';b.style.cssText='position:fixed;left:0;right:0;top:env(safe-area-inset-top,0px);z-index:8;text-align:center;font:700 12px Cairo,sans-serif;padding:4px;background:#b45309;color:#fff';document.body.appendChild(b)}b.textContent='📴 '+t('offl')+(L.get('syn',0)?' '+new Date(L.get('syn',0)).toLocaleString(lang=='ar'?'ar-EG':'en-GB'):'')}else if(b)b.remove()};
 sec();addEventListener('online',()=>{OFF=0;render();if(L.get('in',0)&&AU)sync().then(()=>{render();prefetch()}).catch(()=>{OFF=1;render()})});addEventListener('offline',()=>{OFF=1;render()});
 if(L.get('in',0)&&AU)sync().then(()=>{render();prefetch()}).catch(()=>{OFF=1;render()});else pubGet();
-window.AHOS_API={fs,dec,enc,pull,uid:()=>AU&&AU.u};
+window.AHOS_API={fs,dec,enc,pull,tok,uid:()=>AU&&AU.u};
 render();
 })();
