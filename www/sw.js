@@ -1,7 +1,9 @@
-// AHOS service worker: online = newest files from GitHub Pages, offline = last cached copy
+// AHOS service worker — build 2026-11-02-1
+// online = always the newest files from GitHub Pages, offline = last cached copy. Every build changes this file, so phones pick up the update and reload by themselves.
+const BUILD='2026-11-02-1';
 const V='ahos-cache';
-const SHELL=["./", "class.js", "cloud.js", "dm.js", "extra.js", "hw.js", "icon-192.png", "icon-512.png", "icon-maskable.png", "index.html", "manifest.webmanifest", "notify.js", "pdfdb.js", "quiz.js", "shell.js", "upload.js", "config.js", "uploads-config.js"];
-self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>Promise.allSettled(SHELL.map(u=>c.add(u)))).then(()=>self.skipWaiting()))});
+const SHELL=["./", "build.js", "class.js", "cloud.js", "dm.js", "extra.js", "hw.js", "icon-192.png", "icon-512.png", "icon-maskable.png", "index.html", "manifest.webmanifest", "notify.js", "pdfdb.js", "quiz.js", "shell.js", "upload.js", "config.js", "uploads-config.js"];
+self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>Promise.allSettled(SHELL.map(u=>c.add(new Request(u,{cache:'reload'}))))).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==V).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{const r=e.request;if(r.method!=='GET')return;
 if(r.url.startsWith('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/')){e.respondWith(caches.match(r).then(m=>m||fetch(r).then(res=>{caches.open(V).then(c=>c.put(r,res.clone()));return res})));return}

@@ -32,7 +32,7 @@ const row=(ic,tx,act,ex='')=>`<button class="c row mr" data-a=${act}${ex}><div c
 const moreV=()=>{const sx=sess(),nv=L.get('name','')||t(own()?'ro':'rs');
 return `<div class=w>${hd('☰ '+t('x_more'))}<div class=c><div class=row><div class=av>${esc((nv[0]||'A').toUpperCase())}</div><div><b>${esc(nv)}</b><div class=m>${own()?'👑 '+t('ro'):sx?t('en2')+': '+dt(sx.x):''}</div></div></div></div>
 <div class=gt>${t('x_set')}</div>${row('✨',pnm('look'),'open',' data-s=look')}${row('🌐',lang=='ar'?'English':'عربي','lang')}${row('🌗',t('x_th'),'theme')}${A.snd?row('🔊',t('x_snd')+' '+(L.get('snd',1)?'ON':'OFF'),'snd'):''}
-<div class=gt>${t('x_acc')}</div>${own()?row('👑',t('own2'),'ownerp'):''}${row('💳',pnm('pay'),'open',' data-s=pay')}${row('🚪',t('lo'),'logout')}</div>`};
+<div class=gt>${t('x_acc')}</div>${own()?row('👑',t('own2'),'ownerp'):''}${row('💳',pnm('pay'),'open',' data-s=pay')}${row('🚪',t('lo'),'logout')}<div class=m style="text-align:center;margin-top:8px">AHOS · build ${window.AHOS_BUILD||'?'}</div></div>`};
 const vs=views.sec;views.sec=()=>V.s=='more'?moreV():vs();
 
 const ob=A.back;A.back=()=>{NAV=1;ob()};const oo=A.open;A.open=d=>{NAV=1;oo(d)};

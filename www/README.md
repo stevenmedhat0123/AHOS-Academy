@@ -1,21 +1,15 @@
-# AHOS Academy — تحديث الويب (PWA) على GitHub Pages
+# AHOS Academy — تحديث نسخة الويب
 
-المستودع: stevenmedhat0123/AHOS-Academy ← الرابط: https://stevenmedhat0123.github.io/AHOS-Academy/
+الرابط: https://stevenmedhat0123.github.io/AHOS-Academy/  (لو رابطك مختلف خده من Settings ← Pages)
 
-## طريقة التحديث (من الموبايل)
-1. فك ضغط الـ ZIP (Files ← مطوّل على الملف ← Extract).
-2. المستودع ← Add file ← Upload files ← حدد **كل الملفات** اللي جوه الفولدر ← وافق على الاستبدال ← Commit changes.
-3. استنى دقيقة أو اتنين (Settings ← Pages أو Actions بيبينوا إنه خلص)، وافتح التطبيق: بيتحدث لوحده.
-**ما تلمسش `config.js` ولا `uploads-config.js`** (فيهم مفاتيحك). الـ ZIP ده مش فيه الملفين دول.
+## كل تحديث
+1. فك ضغط الـ ZIP (Files ← Extract).
+2. المستودع ← Add file ← Upload files ← **كل الملفات** ← Commit changes. (ما تلمسش config.js ولا uploads-config.js.)
+3. استنى دقيقتين، وافتح **status.html** في Chrome (نفس الرابط + status.html). هتشوف رقم النسخة وقايمة ✅/❌.
+   - ✅ كله والرقم صح: التطبيق هيتحدث لوحده (بيعمل Reload وحده لما يلاقي ملفات جديدة، لما تفتحه أو ترجعله، وكل 10 دقايق).
+   - لو لسه قديم: اضغط **مسح الكاش وإعادة التحميل** في status.html (ما بيطلعكش من حسابك).
+   - ❌ على ملف: ارفعه تاني. صفحة 404: الملفات اترفعت في مكان غلط أو Pages لسه ما نشرتش (Actions ← "pages build and deployment").
+4. في التطبيق: المزيد ← آخر السطر بيكتب `AHOS · build ...` وده رقم النسخة اللي شغالة.
 
-## ملفات قديمة تمسحها (اختياري)
-من المستودع امسح: `update.js` و `version.js` و `update-config.js` (اضغط على الملف ← ⋯ ← Delete file ← Commit). بقوا مش مستخدمين.
-
-## Firebase: لازم تلصق القواعد
-Firebase ← Firestore ← Rules ← امسح اللي مكتوب والصق محتوى `firestore.rules` من الـ ZIP ← Publish.
-من غيرها الدردشة والرفع والواجبات مش هيشتغلوا (الدردشة بقت في collection اسمه `chats` وليه قاعدة).
-
-## الجديد
-- الدردشة: collection `chats` فيه (text, sender, timestamp من السيرفر). بتتحدث تلقائياً كل ثانيتين ونص وأنت فاتحها.
-- رفع من الموبايل (إنت المالك بس) في الملفات والفيديوهات والإشعارات والألعاب: PDF وصور وفيديو قصير وصوت، وزرار 🎙 تسجيل صوت. حد أقصى 10 ميجا. الطالب يفتح بس.
-- الواجبات (تسليم الطالب ودرجتك)، وعدد مرات استخدام الكود (لوحة المالك ← عدد مرات استخدام الكود، أو ∞ بلا نهاية).
+## Firebase
+الصق `firestore.rules` في Firebase ← Rules ← Publish (مرة بعد كل ZIP فيه تغيير فيها).
