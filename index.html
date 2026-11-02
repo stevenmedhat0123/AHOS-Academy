@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AHOS Academy</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#06161a">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap">
+<style>
+:root{--bg:#eaf5f3;--card:rgba(255,255,255,.72);--bd:rgba(13,148,136,.28);--tx:#0b2a2a;--mut:#4f6f6c;--ac:#0d9488;--ac2:#7c3aed;--glow:rgba(13,148,136,.3);--in:rgba(255,255,255,.8);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#06161a;--card:rgba(18,52,58,.55);--bd:rgba(45,212,191,.22);--tx:#e8fffb;--mut:#8fb5b0;--ac:#14b8a6;--ac2:#8b5cf6;--glow:rgba(20,184,166,.35);--in:rgba(255,255,255,.06);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#06161a;--card:rgba(18,52,58,.55);--bd:rgba(45,212,191,.22);--tx:#e8fffb;--mut:#8fb5b0;--ac:#14b8a6;--ac2:#8b5cf6;--glow:rgba(20,184,166,.35);--in:rgba(255,255,255,.06);color-scheme:dark}
+*{box-sizing:border-box;margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{font-family:Cairo,system-ui,sans-serif;color:var(--tx);min-height:100vh;background:radial-gradient(800px 480px at 85% -10%,var(--glow),transparent 70%),radial-gradient(600px 480px at 0 100%,rgba(124,58,237,.25),transparent 70%),var(--bg)}
+.w{max-width:560px;margin:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:var(--r,22px);padding:16px;}
+.b{display:block;width:100%;border:0;border-radius:calc(var(--r,22px) - 6px);padding:13px;font:700 15px Cairo,sans-serif;color:#fff;background:linear-gradient(135deg,var(--ac),var(--ac2));box-shadow:0 8px 26px var(--glow);cursor:pointer;text-align:center}
+.b.g{background:transparent;color:var(--tx);border:1px solid var(--bd);box-shadow:none}
+.b.s{width:auto;padding:8px 14px;font-size:13px;border-radius:12px}
+input{width:100%;background:var(--in);color:var(--tx);border:1px solid var(--bd);border-radius:14px;padding:12px 14px;font:600 15px Cairo,sans-serif;margin-bottom:10px;outline:0}
+input:focus{border-color:var(--ac)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.t{min-height:112px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;transition:.2s}
+.t:active{transform:scale(.96)}
+.ic{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;font-size:22px;background:linear-gradient(135deg,rgba(13,148,136,.35),rgba(124,58,237,.35));box-shadow:0 0 18px var(--glow)}
+.m{color:var(--mut);font-size:13px}
+.e{color:#f87171;font-size:13px;min-height:18px;margin-bottom:6px}
+.hero{background:linear-gradient(135deg,rgba(124,58,237,.5),rgba(13,148,136,.4))}
+.row{display:flex;align-items:center;gap:12px}
+.chip{border:1px solid var(--bd);border-radius:999px;padding:7px 14px;font:700 13px Cairo,sans-serif;color:var(--tx);background:transparent;cursor:pointer}
+.chip.on{background:var(--ac);color:#fff;border-color:transparent}
+.mono{font-family:ui-monospace,Menlo,monospace;direction:ltr;letter-spacing:.5px;word-break:break-all}
+.tag{font-size:11px;padding:3px 9px;border-radius:99px;background:rgba(13,148,136,.25)}
+.bar{height:8px;border-radius:9px;background:var(--in);overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ac),var(--ac2))}
+.logo{width:84px;height:84px;margin:30px auto 8px;border-radius:28px;display:grid;place-items:center;font:900 40px Cairo,sans-serif;color:#fff;background:linear-gradient(135deg,var(--ac),var(--ac2));box-shadow:0 0 50px var(--glow);animation:fl 3s ease-in-out infinite}
+@keyframes fl{50%{transform:translateY(-8px)}}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ac);color:#fff;padding:10px 18px;border-radius:99px;font-weight:700;opacity:0;transition:.3s;pointer-events:none;z-index:9}
+</style>
+</head>
+<body>
+<div id="app"></div><div id="toast"></div>
+<script>
+const $=s=>document.querySelector(s);
+const M={},L={get(k,d){if(k in M)return M[k];try{const v=localStorage.getItem('ah_'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){M[k]=v;try{localStorage.setItem('ah_'+k,JSON.stringify(v))}catch(e){}}};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const H=async s=>{try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('ahos'+s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return btoa(unescape(encodeURIComponent('ahos'+s)))}};
+const D={tag:['منصتك الذكية للمذاكرة','Your smart study platform'],cph:['اكتب كود التفعيل','Enter activation code'],nph:['اسمك (اختياري)','Your name (optional)'],en:['دخول','Enter'],own:['أنا المالك','I am the owner'],bad:['الكود غير صحيح','Invalid code'],usd:['الكود ده اتستخدم قبل كده','This code was already used'],pin1:['اعمل رقم سري للمالك (4 على الأقل)','Create an owner PIN (4+ characters)'],pin2:['اكتب الرقم السري','Enter your PIN'],pbad:['الرقم السري غلط','Wrong PIN'],hi:['أهلاً بيك','Welcome'],ro:['المالك','Owner'],rs:['طالب','Student'],att:['الحضور','Attendance'],avg:['المتوسط','Average'],sub:['الاشتراك','Plan'],act:['مدفوع','Active'],left:['متبقي','Left'],day:['يوم','days'],forever:['دائم','Unlimited'],sec:['أقسامك','Your sections'],back:['رجوع','Back'],ti:['العنوان','Title'],li:['رابط (اختياري)','Link (optional)'],sc:['الدرجة من 100','Score out of 100'],add:['إضافة','Add'],bl:['الرابط لازم يبدأ بـ http','Link must start with http'],msg:['اكتب رسالة','Write a message'],snd:['إرسال','Send'],op:['فتح','Open'],gen:['إنشاء كود جديد','Create a new code'],rnd:['عشوائي','Random'],man:['يدوي','Manual'],len:['طول الكود','Code length'],dur:['مدة الكود','Code duration'],cd:['عدد الأيام','Number of days'],mk:['إنشاء الكود','Generate code'],cp:['نسخ','Copy'],cpd:['اتنسخ ✓','Copied ✓'],cds:['الأكواد','Codes'],av:['متاح','Available'],us:['اتستخدم','Used'],ex:['انتهى','Expired'],sh:['الكود قصير جداً','Code is too short'],dup:['الكود موجود قبل كده','Code already exists'],nc:['اختار نوع حروف واحد على الأقل','Pick at least one character type'],lo:['خروج','Log out'],own2:['لوحة المالك','Owner panel'],st:['بدأ','Started'],en2:['ينتهي','Ends'],pl:['حالة الاشتراك','Subscription status'],expd:['مدة الكود انتهت، ادخل كود جديد','Your code expired, enter a new one'],one:['كل كود يشتغل مرة واحدة بس','Each code works once only'],d1:['يوم','Day'],d7:['أسبوع','Week'],d30:['شهر','Month'],d365:['سنة','Year'],dc:['مخصص','Custom']};
+const S=[['files','📄','الملفات','Files','لسه مفيش ملفات','No files yet'],['grades','⭐','درجاتي','My grades','لسه مفيش درجات','No grades yet'],['quiz','❓','الاختبارات','Quizzes','مفيش اختبارات جديدة','No quizzes yet'],['games','🎮','ألعاب الدرس','Lesson games','لسه مفيش ألعاب','No games yet'],['videos','▶️','الفيديوهات','Videos','لسه مفيش فيديوهات','No videos yet'],['live','📡','البث المباشر','Live','مفيش بث دلوقتي','Nothing live right now'],['chat','💬','دردشة المجموعة','Group chat','ابدأ الكلام','Start the conversation'],['notif','🔔','الإشعارات','Notifications','مفيش إشعارات','No notifications'],['pay','💳','المصاريف','Subscription','','']];
+let lang=L.get('lang','ar'),V={p:'home'},G={m:'r',d:30,cd:'',len:12,man:'',o:{u:1,l:1,n:1,s:1},last:''};
+document.documentElement.dataset.theme=L.get('theme','dark');
+const t=k=>D[k][lang=='ar'?0:1],own=()=>L.get('own',0),sess=()=>{const s=L.get('sess',null);return s&&s.x>Date.now()?s:null};
+const dt=x=>new Date(x).toLocaleDateString(lang=='ar'?'ar-EG':'en-GB'),dl=d=>({1:t('d1'),7:t('d7'),30:t('d30'),365:t('d365')}[d]||d+' '+t('day'));
+const hd=n=>`<div class=row><button class=chip data-a=back>${lang=='ar'?'→':'←'} ${t('back')}</button><h2 style="font:900 20px Cairo,sans-serif">${n}</h2></div>`;
+const tools=()=>`<div class=row style="justify-content:center;margin-top:8px"><button class=chip data-a=lang>🌐 ${lang=='ar'?'English':'عربي'}</button><button class=chip data-a=theme>🌗</button>${own()||sess()?`<button class=chip data-a=logout>${t('lo')}</button>`:''}</div>`;
+const views={
+gate(){return `<div class=w><div class=logo>A</div><h1 style="text-align:center;font:900 34px Cairo,sans-serif;letter-spacing:3px">AHOS</h1><p class=m style="text-align:center;margin-top:-8px">${t('tag')}</p><div class=c><input id=nm placeholder="${t('nph')}"><input id=code class=mono placeholder="${t('cph')}" autocapitalize=off autocomplete=off spellcheck=false><div class=e id=msg>${esc(V.e||'')}</div><button class=b data-a=redeem>${t('en')}</button></div><button class="b g" data-a=pin>👑 ${t('own')}</button>${tools()}</div>`},
+pin(){const f=!L.get('pin',0);return `<div class=w><div class=logo>👑</div><div class=c><b>${t(f?'pin1':'pin2')}</b><input id=pin type=password inputmode=numeric style="margin-top:10px"><div class=e id=msg></div><button class=b data-a=pinok>${t('en')}</button></div><button class="b g" data-a=gate>${t('back')}</button></div>`},
+home(){
+const a=L.get('att',[]),td=new Date().toDateString();if(!a.includes(td)){a.push(td);L.set('att',a)}
+const g=L.get('i_grades',[]),avg=g.length?Math.round(g.reduce((s,x)=>s+x.s,0)/g.length):null,s=sess(),left=s?Math.ceil((s.x-Date.now())/864e5):0;
+const stars=Array.from({length:5},(_,i)=>`<span style="opacity:${avg!==null&&i<Math.round(avg/20)?1:.25}">★</span>`).join('');
+return `<div class=w><div class="c hero"><div class=row><div class=ic style="font-size:24px">${own()?'👑':'🎓'}</div><div><div class=m>${t('hi')}</div><div style="font:900 22px Cairo,sans-serif">${esc(L.get('name','')||t(own()?'ro':'rs'))}</div></div></div><div style="margin-top:12px;font-size:20px;color:#fde68a">${stars}</div></div>
+<div class=g2 style="grid-template-columns:repeat(3,1fr)">${[[t('att'),a.length],[t('avg'),avg===null?'—':avg],[t('sub'),own()?t('forever'):left+' '+t('day')]].map(x=>`<div class=c style="padding:12px;text-align:center"><div class=m>${x[0]}</div><b style="font-size:16px">${x[1]}</b></div>`).join('')}</div>
+<div class=m style="font-weight:700">${t('sec')}</div>
+<div class=g2>${S.map(x=>`<div class="c t" data-a=open data-s=${x[0]}><div class=ic>${x[1]}</div><b>${x[lang=='ar'?2:3]}</b></div>`).join('')}${own()?`<div class="c t" data-a=ownerp><div class=ic>👑</div><b>${t('own2')}</b></div>`:''}</div>${tools()}</div>`},
+sec(){
+const id=V.s,x=S.find(r=>r[0]==id);let body='';
+if(id=='pay'){const s=sess(),tot=s?(s.x-s.s)/864e5:1,left=s?Math.max(0,Math.ceil((s.x-Date.now())/864e5)):0;
+body=`<div class=c><div class=row><div class=ic>💳</div><div><b style="font-size:20px">${own()?t('forever'):t('act')}</b><div class=m>${t('pl')}</div></div></div>${s&&!own()?`<div class=bar style="margin:14px 0"><i style="width:${Math.min(100,Math.round(100*(1-left/Math.max(tot,1))))}%"></i></div><div class=m>${t('st')}: ${dt(s.s)} · ${t('en2')}: ${dt(s.x)} · ${t('left')}: ${left} ${t('day')}</div>`:''}</div>`}
+else{const it=L.get('i_'+id,[]);
+const form=id=='chat'?`<div class=c><input id=ti placeholder="${t('msg')}"><button class=b data-a=send>${t('snd')}</button></div>`:own()?`<div class=c><input id=ti placeholder="${t('ti')}">${id=='grades'?`<input id=sc type=number min=0 max=100 placeholder="${t('sc')}">`:`<input id=li dir=ltr placeholder="${t('li')}">`}<button class=b data-a=add>${t('add')}</button></div>`:'';
+const x2=r=>own()?`<button class=chip data-a=del data-i=${r.id}>✕</button>`:'';
+const list=it.length?it.map(r=>id=='chat'?`<div class=c style="padding:10px 14px"><div class=row><div class=m style="flex:1">${r.o?'👑 ':''}${esc(r.n)} · ${dt(r.id)}</div>${x2(r)}</div>${esc(r.t)}</div>`:`<div class="c row"><b style="flex:1">${esc(r.t)}</b>${r.s!=null?`<span class=tag style="font-size:15px">${r.s}/100</span>`:''}${r.l?`<a class="b s" style="text-decoration:none" href="${esc(r.l)}" target=_blank rel=noopener>${t('op')}</a>`:''}${x2(r)}</div>`).join(''):`<div class=c style="text-align:center;padding:36px 16px"><div class=ic style="margin:0 auto 12px;width:64px;height:64px;font-size:30px">${x[1]}</div><b>${x[lang=='ar'?4:5]}</b></div>`;
+body=form+list}
+return `<div class=w>${hd(x[lang=='ar'?2:3])}${body}</div>`},
+owner(){
+const cs=L.get('codes',[]),o=G.o,dd=[[1,'d1'],[7,'d7'],[30,'d30'],[365,'d365'],['c','dc']];
+return `<div class=w>${hd(t('own2'))}<div class=c><b>${t('gen')}</b><div class=m style="margin:4px 0 12px">${t('one')}</div>
+<div class=row style="margin-bottom:12px"><button class="chip ${G.m=='r'?'on':''}" data-a=mode data-m=r>🎲 ${t('rnd')}</button><button class="chip ${G.m=='m'?'on':''}" data-a=mode data-m=m>✍️ ${t('man')}</button></div>
+${G.m=='r'?`<input id=len type=number min=6 max=32 value=${G.len} placeholder="${t('len')}"><div class=row style="flex-wrap:wrap;margin-bottom:12px">${[['u','A-Z'],['l','a-z'],['n','0-9'],['s','#$%']].map(k=>`<button class="chip ${o[k[0]]?'on':''}" data-a=opt data-k=${k[0]}>${k[1]}</button>`).join('')}</div>`:`<input id=man class=mono value="${esc(G.man)}" placeholder="Aa1#xyz" autocapitalize=off>`}
+<div class=m style="margin-bottom:8px">${t('dur')}</div><div class=row style="flex-wrap:wrap;margin-bottom:12px">${dd.map(k=>`<button class="chip ${G.d==k[0]?'on':''}" data-a=dur data-d=${k[0]}>${t(k[1])}</button>`).join('')}</div>
+${G.d=='c'?`<input id=cd type=number min=1 value="${esc(G.cd)}" placeholder="${t('cd')}">`:''}
+<button class=b data-a=gen>✨ ${t('mk')}</button>
+${G.last?`<div class=c style="margin-top:12px;text-align:center;border-color:var(--ac)"><div class=mono style="font-weight:800;font-size:22px">${esc(G.last)}</div><button class="b s" style="margin:10px auto 0" data-a=copy data-c="${esc(G.last)}">${t('cp')}</button></div>`:''}</div>
+<div class=c><b>${t('cds')} (${cs.length})</b>${cs.map(k=>`<div class=row style="margin-top:12px;padding-top:12px;border-top:1px solid var(--bd)"><div style="flex:1;min-width:0"><div class=mono data-a=copy data-c="${esc(k.c)}" style="font-weight:800;cursor:pointer">${esc(k.c)}</div><div class=m>${dl(k.d)} · <span class=tag>${k.u?(k.x<Date.now()?t('ex'):t('us')+' → '+dt(k.x)):t('av')}</span></div></div><button class=chip data-a=delc data-c="${esc(k.c)}">✕</button></div>`).join('')}</div></div>`}
+};
+function render(){
+const h=document.documentElement;h.lang=lang;h.dir=lang=='ar'?'rtl':'ltr';
+if(!(own()||sess())){const s=L.get('sess',null);V={p:V.p=='pin'?'pin':'gate',e:s&&s.x<=Date.now()?t('expd'):''}}
+else if(V.p=='gate'||V.p=='pin')V={p:'home'};
+if(V.p=='owner'&&!own())V={p:'home'};
+$('#app').innerHTML=views[V.p]()}
+function toast(m){const e=$('#toast');e.textContent=m;e.style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.opacity=0,2000)}
+const A={
+lang(){lang=lang=='ar'?'en':'ar';L.set('lang',lang);render()},
+theme(){const h=document.documentElement,n=h.dataset.theme=='dark'?'light':'dark';h.dataset.theme=n;L.set('theme',n)},
+redeem(){const c=$('#code').value.trim(),nm=$('#nm').value.trim(),e=$('#msg'),cs=L.get('codes',[]),k=cs.find(r=>r.c===c);
+if(!k)return e.textContent=t('bad');if(k.u)return e.textContent=t('usd');
+k.u=Date.now();k.x=k.u+k.d*864e5;L.set('codes',cs);L.set('sess',{c,s:k.u,x:k.x});if(nm)L.set('name',nm);V={p:'home'};render()},
+pin(){V={p:'pin'};render()},gate(){V={p:'gate'};render()},
+async pinok(){const p=$('#pin').value,e=$('#msg');if(p.length<4)return e.textContent=t('pin1');const h=await H(p),s=L.get('pin',0);if(s&&s!==h)return e.textContent=t('pbad');if(!s)L.set('pin',h);L.set('own',1);V={p:'home'};render()},
+logout(){L.set('own',0);L.set('sess',null);V={p:'gate'};render()},
+open(d){V={p:'sec',s:d.s};render()},back(){V={p:'home'};render()},ownerp(){V={p:'owner'};render()},
+add(){const ti=$('#ti').value.trim();if(!ti)return;const it=L.get('i_'+V.s,[]),r={id:Date.now(),t:ti};
+if(V.s=='grades'){const s=parseFloat($('#sc').value);if(isNaN(s))return;r.s=Math.max(0,Math.min(100,s))}
+else{const l=$('#li').value.trim();if(l){if(!/^https?:\/\//i.test(l))return toast(t('bl'));r.l=l}}
+it.unshift(r);L.set('i_'+V.s,it);render()},
+send(){const m=$('#ti').value.trim();if(!m)return;const it=L.get('i_chat',[]);it.unshift({id:Date.now(),t:m,n:L.get('name','')||t(own()?'ro':'rs'),o:own()?1:0});L.set('i_chat',it.slice(0,200));render()},
+del(d){L.set('i_'+V.s,L.get('i_'+V.s,[]).filter(r=>r.id!=d.i));render()},
+sync(){const g=i=>$('#'+i);if(g('len'))G.len=+g('len').value||12;if(g('man'))G.man=g('man').value;if(g('cd'))G.cd=g('cd').value},
+mode(d){A.sync();G.m=d.m;render()},opt(d){A.sync();G.o[d.k]=G.o[d.k]?0:1;render()},dur(d){A.sync();G.d=d.d=='c'?'c':+d.d;render()},
+gen(){A.sync();const cs=L.get('codes',[]);let c;
+if(G.m=='m'){c=G.man.trim();if(c.length<3)return toast(t('sh'))}
+else{const ss=[['u','ABCDEFGHJKLMNPQRSTUVWXYZ'],['l','abcdefghijkmnpqrstuvwxyz'],['n','23456789'],['s','#$%&*?+=@!']].filter(x=>G.o[x[0]]).map(x=>x[1]);if(!ss.length)return toast(t('nc'));
+const r=n=>{const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n},all=ss.join(''),n=Math.max(6,Math.min(32,G.len),ss.length);let ch=ss.map(s=>s[r(s.length)]);
+while(ch.length<n)ch.push(all[r(all.length)]);for(let i=ch.length-1;i>0;i--){const j=r(i+1);[ch[i],ch[j]]=[ch[j],ch[i]]}c=ch.join('')}
+if(cs.some(k=>k.c===c))return toast(t('dup'));
+const d=G.d=='c'?Math.max(1,parseInt(G.cd)||1):G.d;cs.unshift({c,d,t:Date.now(),u:0});L.set('codes',cs);G.last=c;render()},
+copy(d){try{navigator.clipboard.writeText(d.c).then(()=>toast(t('cpd')),()=>toast(d.c))}catch(e){toast(d.c)}},
+delc(d){L.set('codes',L.get('codes',[]).filter(k=>k.c!==d.c));render()}
+};
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(b&&A[b.dataset.a])A[b.dataset.a](b.dataset)});
+render();
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="build.js"></script>
+<script src="config.js"></script>
+<script src="uploads-config.js"></script>
+<script src="extra.js"></script>
+<script src="cloud.js"></script>
+<script src="notify.js"></script>
+<script src="upload.js"></script>
+<script src="pdfdb.js"></script>
+<script src="hw.js"></script>
+<script src="quiz.js"></script>
+<script src="dm.js"></script>
+<script src="class.js"></script>
+<script src="shell.js"></script>
+<script>if('serviceWorker' in navigator){const had=!!navigator.serviceWorker.controller;
+navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had)location.reload()});
+addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>{r.update();document.addEventListener('visibilitychange',()=>{if(!document.hidden)r.update()});setInterval(()=>r.update(),600000)}).catch(()=>{}))}</script>
+</body>
+</html>

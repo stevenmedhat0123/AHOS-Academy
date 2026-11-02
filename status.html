@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>AHOS — فحص التحديث</title>
+<style>body{font-family:system-ui,sans-serif;background:#06161a;color:#e8fffb;padding:16px;max-width:560px;margin:auto}h2{margin:0 0 12px}.r{padding:6px 0;border-bottom:1px solid #1d4b4b;font-size:15px;direction:ltr;text-align:left}b{color:#2dd4bf}button{display:block;width:100%;margin:14px 0 0;padding:14px;border:0;border-radius:14px;background:#14b8a6;color:#fff;font:700 16px system-ui;cursor:pointer}.g{background:#334155}</style></head>
+<body><h2>فحص ملفات التطبيق</h2><div id="o">بيفحص…</div>
+<button onclick="location.href='index.html'">فتح التطبيق</button>
+<button class="g" onclick="reset()">مسح الكاش وإعادة التحميل (ما بيعملش خروج)</button>
+<script>
+const WANT='2026-11-02-1',F=["build.js", "class.js", "cloud.js", "dm.js", "extra.js", "hw.js", "icon-192.png", "icon-512.png", "icon-maskable.png", "index.html", "manifest.webmanifest", "notify.js", "pdfdb.js", "quiz.js", "shell.js", "sw.js", "upload.js", "config.js", "uploads-config.js"];
+async function reset(){try{const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()));const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}catch(e){}location.href='index.html?r='+Date.now()}
+(async()=>{let b='؟',h='';
+try{const t=await(await fetch('build.js?'+Date.now(),{cache:'no-store'})).text();b=(t.match(/'([^']+)'/)||[])[1]||'؟'}catch(e){}
+h+='<p>رقم النسخة اللي على GitHub Pages دلوقتي: <b>'+b+'</b><br>الرقم المطلوب: <b>'+WANT+'</b></p>';
+let bad=0;for(const f of F){let ok=false;try{ok=(await fetch(f+'?'+Date.now(),{cache:'no-store'})).ok}catch(e){}if(!ok)bad++;h+='<div class="r">'+(ok?'✅ ':'❌ ')+f+'</div>'}
+h+='<p>'+(bad?'فيه ملفات ناقصة (❌): ارفعها تاني على المستودع.':(b==WANT?'كل الملفات موجودة والنسخة صح ✅. لو التطبيق لسه قديم اضغط "مسح الكاش" تحت.':'الملفات موجودة لكن رقم النسخة قديم: الملفات الجديدة ما اترفعتش أو GitHub Pages لسه بيحدّث (استنى دقيقتين وحدّث الصفحة).'))+'</p>';
+document.getElementById('o').innerHTML=h})();
+</script></body></html>
